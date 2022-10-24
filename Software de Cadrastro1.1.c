@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 
-//Declaração das Estruturas a serem utilizadas
+//Declaraï¿½ï¿½o das Estruturas a serem utilizadas
 
 typedef struct CPStruct
 {
@@ -27,42 +27,27 @@ char cidade[15];
 char estado[15];
 } Pessoa1;
 
-typedef struct AFuncionarios
-{
-char cargo[30];
-char apelido[40];
-char idade[3];
-char NMatricola[10];
-char horario[20];
-char CPFisica[12];
-char salario[15];
-} Aventureiros;
 
-
-//Declaração das variáveis
+//Declaraï¿½ï¿½o das variï¿½veis
 int op = 0;
 int edit_x;
 int senha;
 int senhaC = 777;
-int senhaF = 888;
 int qtdClientes;
 int qtdPedidos;
 int qtdEndereco;
 int tamClientes;
 int tamPedidos;
-int qtdFuncionarios;
-int tamFuncionarios;
-Aventureiros *FunAnve;
 Pessoa *clientes;
 Pessoa1 *pedido;
-FILE *arquivoFUNCIONARIO;
 FILE *arquivoPEDIDOS;
 char clientes_dir[] = "Clientes.bin";
 
-//Declaração dos Procedimentos e Funções a serem utilizados
+//Declaraï¿½ï¿½o dos Procedimentos e Funï¿½ï¿½es a serem utilizados
 void menuPrincipal();
 
-void LSCliente();
+void BuscarPedido();
+void login();
 void menuClientes();
 void menuAlterarCliente();
 Pessoa receberCliente();
@@ -77,16 +62,14 @@ void alterarEndereco();
 void edit();
 void editEndereco();
 
-void LSFuncionario();
-void menuFuncionarios();
+void cadrastro();
 void editDadosCargo();
 void editCadrastral();
-Aventureiros receberFuncionarios();
 void inserirFuncionario();
 
 void removerQuebraLinha();
 
-//Início do main
+//Inï¿½cio do main
 int main(int argc, char** argv)
 {
     menuPrincipal();
@@ -108,10 +91,11 @@ void menuPrincipal()
 {
     do
     {
+        system("cls");
         printf("\n");
         printf ("\t\t\t\t  DREAM MACHINE\n\n");
-        printf("\t\t\t\t 1 - Area Cliente          \n");
-        printf("\t\t\t\t 2 - Area Funcionario         \n");
+        printf("\t\t\t\t 1 - CADRASTRO          \n");
+        printf("\t\t\t\t 2 - LOGIN         \n");
         printf("\t\t\t\t 0 - Sair             \n");
         printf ("\t\t\t\t                      \n");
         printf("\t\t\tPor favor, selecione uma opcao: ");
@@ -121,10 +105,10 @@ void menuPrincipal()
         switch(op)
         {
         case 1:
-            LSCliente();
+            cadrastro();
             break;
         case 2:
-            LSFuncionario();
+            login();
             break;
         case 0:
             exit(EXIT_SUCCESS);
@@ -137,7 +121,11 @@ void menuPrincipal()
     system("cls");
 }
 
-void LSCliente()
+void cadrastro()
+{
+}
+
+void login()
 {
     printf("\n\t\t\t\tDigite sua senha: ");
     scanf("%d", &senha);
@@ -152,202 +140,6 @@ void LSCliente()
 
 }
 
-void LSFuncionario()
-{
-    printf("\n\t\t\t\tDigite sua senha: ");
-    scanf("%d", &senha);
-
-    while(senha != senhaF){
-        printf("\n\t\t\t\tSenha invalida!\n\n\t\t\t\tDigite a senha correta: ");
-        scanf("%d", &senha);
-    }
-
-    printf("\n\t\t\t\tAcesso permitido!\n");
-    return menuFuncionarios();
-
-}
-
-void menuFuncionarios()
-{
-    do
-    {
-        printf("\n");
-        printf ("\t\t\t\t  DREAM MACHINE\n\n");
-        printf ("\t\t\t\t                      \n");
-        printf("\t\t\t    1 - Consultar todos os funcionarios              \n");
-        printf("\t\t\t    2 - Novo Funcionario       \n");
-        printf("\t\t\t    3 - Alterar Dados Cadrastrais    \n");
-        printf("\t\t\t    4 - Alterar Dados Do Cargo     \n");
-        printf("\t\t\t    0 - Menu Principal                 \n");
-        printf ("\t\t\t                             \n");
-        printf ("\n\n");
-        printf("\t\t\tPor favor, selecione a opcao desejada: ");
-        fflush(stdin);
-        scanf("%d", &op);
-        system("cls");
-        switch(op)
-        {
-        case 1:
-            listarFuncionarios();
-            break;
-        case 2:
-            fflush(stdin);
-            inserirFuncionarios(receberFuncionarios());
-            break;
-        case 3:
-            editCadrastral(FunAnve, edit_x);
-            break;
-        case 4:
-            editDadosCargo(FunAnve, edit_x);
-            break;
-        case 0:
-            menuPrincipal;
-        default:
-            printf ("\n\t\t\tOpcao invalida!\n\n");
-            fflush(stdin);
-        }
-    }
-    while(op != 0);
-    system("cls");
-}
-void editDadosCargo (struct AFuncionarios *FunAnve, int x)
-{
-    printf("Adicione os novos dados\n");
-    printf("Novo Cargo: ");
-    fflush(stdin);
-    fgets(FunAnve[x].cargo, 40, stdin);
-
-    printf("Novo Horario: ");
-    fflush(stdin);
-    fgets(FunAnve[x].horario, 15, stdin);
-
-    printf("Novo Salario: ");
-    fflush(stdin);
-    fgets(FunAnve[x].salario, 15, stdin);
-
-    printf("Nova Matricula: ");
-    fflush(stdin);
-    fgets(FunAnve[x].NMatricola, 15, stdin);
-
-     sucesso();
-    }
-
-void editCadrastral (struct AFuncionarios *FunAnve, int x)
-{
-    printf("Adicione os novos dados\n");
-    printf("Nome: ");
-    fflush(stdin);
-    fgets(FunAnve[x].apelido, 50, stdin);
-
-    printf("Nova Idade: ");
-    fflush(stdin);
-    fgets(FunAnve[x].idade, 60, stdin);
-
-    printf("Novo CPF: ");
-    fflush(stdin);
-    fgets(FunAnve[x].CPFisica, 80, stdin);
-
-     sucesso();
-}
-
-void listarFuncionarios()
-{
-    int c;
-    printf("\n%d pedido cadastrados\n", qtdFuncionarios);
-    for(c=0; c < qtdFuncionarios; c++)
-    {
-        printf("-----------------------------------\n");
-        printf("(%d)\n", c+1);
-        printf("Status Andamento\n");
-        printf("Cargo = %s\n", FunAnve[c].cargo);
-        printf("Nome = %s\n", FunAnve[c].apelido);
-        printf("Salario = %s\n", FunAnve[c].salario);
-        printf("Numero de matricula  = %s\n", FunAnve[c].NMatricola);
-        printf("CPF = %s\n", FunAnve[c].CPFisica);
-    }
-}
-
-Aventureiros receberFuncionarios()
-{
-        arquivoFUNCIONARIO = fopen("arquivoFUNCIONARIO.txt", "a");
-
-    if (arquivoFUNCIONARIO == NULL)
-    {
-        printf("Erro na abertura do Arquivo");
-        exit(EXIT_SUCCESS);
-    }
-    else
-    {
-    Aventureiros p;
-
-    printf("Cargo: ");
-    receberString(p.cargo, 30);
-    printf ("Nome: ");
-    receberString(p.apelido, 40);
-    fflush(stdin);
-    printf ("Salario: ");
-    receberString(p.salario, 15);
-    fflush(stdin);
-    printf ("Idade: ");
-    receberString(p.idade, 3);
-    fflush(stdin);
-    printf ("Numero de matricula: ");
-    receberString(p.NMatricola, 10);
-    fflush(stdin);
-    printf ("Horario de Trabalho: ");
-    receberString(p.horario, 20);
-    fflush(stdin);
-    printf ("CPF: ");
-    receberString(p.CPFisica, 12);
-    fflush(stdin);
-
-    fprintf(arquivoFUNCIONARIO,"============================\n", FunAnve);
-    fprintf(arquivoFUNCIONARIO,"CARGO: ", FunAnve);
-    fprintf(arquivoFUNCIONARIO, p.cargo, FunAnve);
-    fprintf(arquivoFUNCIONARIO,"\n", FunAnve);
-
-    fprintf(arquivoFUNCIONARIO,"NOME: ", FunAnve);
-    fprintf(arquivoFUNCIONARIO, p.apelido, FunAnve);
-    fprintf(arquivoFUNCIONARIO,"\n", FunAnve);
-
-    fprintf(arquivoFUNCIONARIO,"SALARIO: ", FunAnve);
-    fprintf(arquivoFUNCIONARIO, p.salario, FunAnve);
-    fprintf(arquivoFUNCIONARIO,"\n", FunAnve);
-
-    fprintf(arquivoFUNCIONARIO,"IDADE: ", FunAnve);
-    fprintf(arquivoFUNCIONARIO, p.idade, FunAnve);
-    fprintf(arquivoFUNCIONARIO,"\n", FunAnve);
-
-    fprintf(arquivoFUNCIONARIO,"NUMERO DA MATRICOLA: ", FunAnve);
-    fprintf(arquivoFUNCIONARIO, p.NMatricola, FunAnve);
-    fprintf(arquivoFUNCIONARIO,"\n", FunAnve);
-
-    fprintf(arquivoFUNCIONARIO,"HORARIO DE TRABALHO: ", FunAnve);
-    fprintf(arquivoFUNCIONARIO, p.horario, FunAnve);
-    fprintf(arquivoFUNCIONARIO,"\n", FunAnve);
-
-    fprintf(arquivoFUNCIONARIO,"CPF: ", FunAnve);
-    fprintf(arquivoFUNCIONARIO, p.CPFisica, FunAnve);
-    fprintf(arquivoFUNCIONARIO,"\n", FunAnve);
-    fprintf(arquivoFUNCIONARIO,"=============================", FunAnve);
-
-    fclose(arquivoFUNCIONARIO);
-
-    sucesso();
-    return p;
-    }
-}
-
-void inserirFuncionarios(Aventureiros p)
-{
-    if(qtdFuncionarios == tamFuncionarios)
-    {
-        tamFuncionarios *= 1.5;
-        FunAnve = realloc(FunAnve, tamFuncionarios*sizeof(Aventureiros));
-    }
-    FunAnve[qtdFuncionarios] = p;
-    qtdFuncionarios++;
-}
 
 void menuClientes()
 {
@@ -360,6 +152,7 @@ void menuClientes()
         printf("\t\t\t    2 - Novo Pedido       \n");
         printf("\t\t\t    3 - Alterar Endereco    \n");
         printf("\t\t\t    4 - Alterar Pedido     \n");
+        printf("\t\t\t    5 - buscar               \n");
         printf("\t\t\t    0 - Menu Principal                 \n");
         printf ("\t\t\t                             \n");
         printf ("\n\n");
@@ -382,6 +175,9 @@ void menuClientes()
         case 4:
             editUrso(pedido, edit_x);
             break;
+        case 5:
+            buscar();
+            break;
         case 0:
             menuPrincipal();
         default:
@@ -394,8 +190,38 @@ void menuClientes()
 }
 
 
+void buscar()
+{
+/*
+    int texto,palavra;
+
+    int i, tamP, tamT, j;
+    tamP = strlen(palavra)-1;
+    tamT = strlen(texto)-1;
+    for(i=0;i<=tamT-tamP;i++){
+        j=0;
+        while(j<tamP){
+            if(palavra[j] != texto [i+j]) break;
+            j++;
+        }
+        if(j == tamP) printf("SSSS");
+        }
+*/
+
+}
+
 void listarPedidos()
 {
+        arquivoPEDIDOS = fopen("arquivoPEDIDOS.txt", "r");
+
+    if (arquivoPEDIDOS == NULL)
+    {
+        printf("Erro na abertura do Arquivo");
+        exit(EXIT_SUCCESS);
+    }
+    else
+    {
+
     int c;
     printf("\n%d pedido cadastrados\n", qtdPedidos);
     for(c=0; c < qtdPedidos; c++)
@@ -403,13 +229,16 @@ void listarPedidos()
         printf("-----------------------------------\n");
         printf("(%d)\n", c+1);
         printf("Status Andamento\n");
-        printf("COR  = %s\n", pedido[c].cor);
-        printf("MOD = %s\n", pedido[c].mod);
-        printf("TAM = %s\n", pedido[c].tam);
+        printf("COR  = %s\n", "arquivoPEDIDOS.txt", "r");
+        printf("MOD = %s\n", "arquivoPEDIDOS.txt", "r");
+        printf("TAM = %s\n", "arquivoPEDIDOS.txt", "r");
         printf("Endereco cadrastrado\n");
         printf("RUA  = %s\n", pedido[c].rua);
         printf("NUM = %s\n", pedido[c].numero);
         printf("CEP = %s\n", pedido[c].cep);
+
+    }
+        fclose(arquivoPEDIDOS);
     }
 }
 
@@ -444,14 +273,43 @@ Pessoa1 receberPedido()
     {
     Pessoa1 p;
 
-    printf("Cor desejada: ");
-    receberString(p.cor, 39);
-    printf ("Modelo desejado: ");
-    receberString(p.mod, 13);
+    printf(" Novo Pedido  \n");
+    printf(" Esolha o Modelo: \n ");
+    printf(" 1 - Urso\n");
+    printf(" 2 - Gato\n");
+    printf(" 3 - Cachorro\n");
+    printf(" 4 - Coelho\n");
+    printf(" 5 - Sapo\n");
+    printf(" 6 - Lhama\n");
     fflush(stdin);
-    printf ("Tamanho : ");
+    receberString(p.mod,10);
+    system("cls");
+
+
+    printf(" Escolha uma Cor:  \n ");
+    printf(" 1 - Rosa\n");
+    printf(" 2 - Azul\n");
+    printf(" 3 - Branco\n");
+    printf(" 4 - Preto\n");
+    printf(" 5 - Marrom\n");
+    printf(" 6 - Amarelo\n");
+    printf(" 7 - LilÃ¡s\n");
+    printf(" 8 - Verde\n");
+    fflush(stdin);
+    receberString(p.cor, 13);
+    system("cls");
+
+
+    printf("Esolha o Tamanho:  \n");
+    printf(" 1 - Pequeno\n");
+    printf(" 2 - MÃ©dio\n");
+    printf(" 3 - Grande\n");
+    printf(" 4 - Extra Grande\n");
     receberString(p.tam, 11);
     fflush(stdin);
+    system("cls");
+
+
     printf("\nInforme o endereco de entrega:\n\n");
     printf ("CEP: ");
     receberString(p.cep, 9);
@@ -510,6 +368,8 @@ Pessoa1 receberPedido()
     fprintf(arquivoPEDIDOS, p.estado, pedido);
     fprintf(arquivoPEDIDOS,"\n", pedido);
     fprintf(arquivoPEDIDOS,"===============================", pedido);
+    system("cls");
+
 
     fclose(arquivoPEDIDOS);
 
@@ -576,4 +436,3 @@ void editEndereco(struct PedidoStruct *pedido, int x) {
 
      sucesso();
 }
-
