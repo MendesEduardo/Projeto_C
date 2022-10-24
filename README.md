@@ -1,2 +1,2 @@
 # Projeto_C
-Software de Cadastro de cliente/funcionários  e para cliente realizarem pedidos.
+Software de Cadastro de cliente para realização de pedidos.
