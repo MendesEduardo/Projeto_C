@@ -3,22 +3,16 @@
 #include <ctype.h>
 #include <math.h>
 #include <string.h>
+#include <locale.h>
 
-//Declara��o das Estruturas a serem utilizadas
-
-typedef struct CPStruct
-{
-char nome[40];
-char reg[12];
-char rg[10];
-char telefone[11];
-} Pessoa;
+//Declarando das Estruturas a serem utilizadas
 
 typedef struct PedidoStruct
 {
 char cor[10];
 char mod[10];
 char tam[10];
+
 char rua[40];
 char numero[10];
 char cep[10];
@@ -28,64 +22,57 @@ char estado[15];
 } Pessoa1;
 
 
-//Declara��o das vari�veis
+//Declarando das variaveis
 int op = 0;
 int edit_x;
 int senha;
-int senhaC = 777;
-int qtdClientes;
+int email;
+int senhaCerta;
+int emailCerto;
 int qtdPedidos;
-int qtdEndereco;
-int tamClientes;
 int tamPedidos;
-Pessoa *clientes;
 Pessoa1 *pedido;
 FILE *arquivoPEDIDOS;
-char clientes_dir[] = "Clientes.bin";
 
-//Declara��o dos Procedimentos e Fun��es a serem utilizados
+//Declarando as Funçoes a serem utilizadas
 void menuPrincipal();
 
-void BuscarPedido();
 void login();
+void DadosDoUsuario();
 void menuClientes();
-void menuAlterarCliente();
-Pessoa receberCliente();
-void inserirCliente();
-void listarClientes();
 
 Pessoa1 receberPedido();
 void inserirPedido();
 void listarPedidos();
-void enderecoEntrega();
-void alterarEndereco();
-void edit();
 void editEndereco();
 
 void cadrastro();
-void editDadosCargo();
-void editCadrastral();
-void inserirFuncionario();
-
 void removerQuebraLinha();
 
-//In�cio do main
+//Inicio do main
 int main(int argc, char** argv)
 {
+    setlocale(LC_ALL,"Portuguese");
     menuPrincipal();
     return 0;
 }
+
+// Informa quando uma operação é mal secedida
 
 void erro(char *nome_arquivo)
 {
     printf("\t\t\t\tNao foi possivel abrir o arquivo %s\n", nome_arquivo);
 }
 
+// Informa quando uma operação é bem secedida
+
 void sucesso()
 {
     system("cls");
     printf ("\t\t\t\tOperacao realizada com sucesso!");
 }
+
+// Aqui é o menu inicial
 
 void menuPrincipal()
 {
@@ -121,25 +108,46 @@ void menuPrincipal()
     system("cls");
 }
 
+// Essa função é usada para o usuario fazer o cadrastro no sistema
+
 void cadrastro()
 {
+    printf("\n\t\t\t\tDigite seu e-mail: ");
+    scanf("%d", &emailCerto);
+    printf("\n\t\t\t\tDigite sua senha: ");
+    scanf("%d", &senhaCerta);
+
+    sucesso();
+    return menuClientes();
 }
+
+// Essa função é usada para o usuario fazer o login no sistema
 
 void login()
 {
+    printf("\n\t\t\t\tDigite seu e-mail: ");
+    scanf("%d", &email);
     printf("\n\t\t\t\tDigite sua senha: ");
     scanf("%d", &senha);
 
-    while(senha != senhaC){
-        printf("\n\t\t\t\tSenha invalida!\n\n\t\t\t\tDigite a senha correta: ");
+    while(senha != senhaCerta || email != emailCerto){
+        system("cls");
+
+        printf("\n\t\t\t\tSenha ou e-mail invalidos!\n\n\t\t\t\tDigite os dados corretamente\n ");
+
+        printf("\n\t\t\t\tDigite seu e-mail: ");
+        scanf("%d", &email);
+        printf("\n\t\t\t\tDigite sua senha: ");
         scanf("%d", &senha);
     }
-
+    system("cls");
     printf("\n\t\t\t\tAcesso permitido!\n");
+
     return menuClientes();
 
 }
 
+// Esse é o menu apos usuario fazer o login
 
 void menuClientes()
 {
@@ -152,7 +160,6 @@ void menuClientes()
         printf("\t\t\t    2 - Novo Pedido       \n");
         printf("\t\t\t    3 - Alterar Endereco    \n");
         printf("\t\t\t    4 - Alterar Pedido     \n");
-        printf("\t\t\t    5 - buscar               \n");
         printf("\t\t\t    0 - Menu Principal                 \n");
         printf ("\t\t\t                             \n");
         printf ("\n\n");
@@ -176,7 +183,6 @@ void menuClientes()
             editUrso(pedido, edit_x);
             break;
         case 5:
-            buscar();
             break;
         case 0:
             menuPrincipal();
@@ -189,26 +195,7 @@ void menuClientes()
     system("cls");
 }
 
-
-void buscar()
-{
-/*
-    int texto,palavra;
-
-    int i, tamP, tamT, j;
-    tamP = strlen(palavra)-1;
-    tamT = strlen(texto)-1;
-    for(i=0;i<=tamT-tamP;i++){
-        j=0;
-        while(j<tamP){
-            if(palavra[j] != texto [i+j]) break;
-            j++;
-        }
-        if(j == tamP) printf("SSSS");
-        }
-*/
-
-}
+// Aqui lista todos os pedidos já feitos
 
 void listarPedidos()
 {
@@ -229,9 +216,9 @@ void listarPedidos()
         printf("-----------------------------------\n");
         printf("(%d)\n", c+1);
         printf("Status Andamento\n");
-        printf("COR  = %s\n", "arquivoPEDIDOS.txt", "r");
-        printf("MOD = %s\n", "arquivoPEDIDOS.txt", "r");
-        printf("TAM = %s\n", "arquivoPEDIDOS.txt", "r");
+        printf("COR  = %s\n", pedido[c].cor);
+        printf("MOD = %s\n", pedido[c].mod);
+        printf("TAM = %s\n", pedido[c].tam);
         printf("Endereco cadrastrado\n");
         printf("RUA  = %s\n", pedido[c].rua);
         printf("NUM = %s\n", pedido[c].numero);
@@ -241,6 +228,8 @@ void listarPedidos()
         fclose(arquivoPEDIDOS);
     }
 }
+
+// Remover a quebra de linha no fim de uma string
 
 void removerQuebraLinha(char *string)
 {
@@ -254,11 +243,15 @@ void removerQuebraLinha(char *string)
     }
 }
 
+// receber Strings em C
+
 void receberString(char *string_destino, int quantidade_caracteres)
 {
     fgets(string_destino, quantidade_caracteres, stdin);
     removerQuebraLinha(string_destino);
 }
+
+// Opçoes de escolha dos pedidos
 
 Pessoa1 receberPedido()
 {
@@ -378,6 +371,8 @@ Pessoa1 receberPedido()
     }
 }
 
+// Adicionanr os pedidos
+
 void inserirPedido(Pessoa1 p)
 {
     if(qtdPedidos == tamPedidos)
@@ -389,6 +384,7 @@ void inserirPedido(Pessoa1 p)
     qtdPedidos++;
 }
 
+// Edita os dados do pedidos
 
 void editUrso(struct PedidoStruct *pedido, int x)
 {
@@ -407,6 +403,8 @@ void editUrso(struct PedidoStruct *pedido, int x)
 
      sucesso();
 }
+
+// Adicionanr o endereço dos pedidos
 
 void editEndereco(struct PedidoStruct *pedido, int x) {
     printf("Adicione os novos dados\n");
